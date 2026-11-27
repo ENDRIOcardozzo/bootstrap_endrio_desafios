@@ -1,0 +1,167 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel de Controle Operacional</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<div class="container">
+<a class="navbar-brand fw-bold" href="index.html">DS • Bootstrap 5</a>
+<button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#menu"><span class="navbar-toggler-icon"></span></button>
+<div class="collapse navbar-collapse" id="menu">
+<ul class="navbar-nav ms-auto">
+<li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
+<li class="nav-item"><a class="nav-link" href="desafio01.html">Desafio 01</a></li>
+<li class="nav-item"><a class="nav-link" href="desafio02.html">Desafio 02</a></li>
+<li class="nav-item"><a class="nav-link" href="desafio03.html">Desafio 03</a></li>
+<li class="nav-item"><a class="nav-link" href="desafio04.html">Desafio 04</a></li>
+<li class="nav-item"><a class="nav-link active" href="desafio05.html">Desafio 05</a></li>
+</ul>
+</div>
+</div>
+</nav>
+<main class="container py-5">
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+<div>
+<h1 class="fw-bold">Painel Operacional</h1>
+<p class="text-muted mb-0">Gerenciamento de entregas e registros</p>
+</div>
+<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRegistro">+ Novo registro</button>
+</div>
+<div class="alert alert-info" role="alert">
+<strong>Bem-vindo!</strong> Acompanhe os registros e o andamento das operações.
+</div>
+<div class="row g-3 mb-4">
+<div class="col-12 col-md-4">
+<div class="card shadow-sm border-0"><div class="card-body"><p class="text-muted mb-1">Total de registros</p><h2 id="total" class="fw-bold">3</h2></div></div>
+</div>
+<div class="col-12 col-md-4">
+<div class="card shadow-sm border-0"><div class="card-body"><p class="text-muted mb-1">Pendentes</p><h2 id="pendentes" class="fw-bold text-warning">1</h2></div></div>
+</div>
+<div class="col-12 col-md-4">
+<div class="card shadow-sm border-0"><div class="card-body"><p class="text-muted mb-1">Concluídos</p><h2 id="concluidos" class="fw-bold text-success">1</h2></div></div>
+</div>
+</div>
+<div class="card border-0 shadow-sm">
+<div class="card-body">
+<div class="d-flex justify-content-between flex-wrap gap-2 mb-3">
+<h4 class="fw-bold">Registros cadastrados</h4>
+<input type="text" id="pesquisa" class="form-control w-auto" placeholder="Pesquisar registro...">
+</div>
+<div class="table-responsive">
+<table class="table table-hover align-middle">
+<thead class="table-dark">
+<tr><th>Nome</th><th>Descrição</th><th>Data</th><th>Status</th><th>Ação</th></tr>
+</thead>
+<tbody id="tabela">
+<tr><td>João Silva</td><td>Entrega de produtos</td><td>27/11/2026</td><td><span class="badge bg-warning text-dark">Pendente</span></td><td><button class="btn btn-sm btn-success" onclick="concluir(this)">Concluir</button></td></tr>
+<tr><td>Maria Souza</td><td>Separação de pedidos</td><td>26/11/2026</td><td><span class="badge bg-success">Concluído</span></td><td><button class="btn btn-sm btn-secondary" disabled>Finalizado</button></td></tr>
+<tr><td>Pedro Santos</td><td>Conferência de estoque</td><td>25/11/2026</td><td><span class="badge bg-info text-dark">Em andamento</span></td><td><button class="btn btn-sm btn-success" onclick="concluir(this)">Concluir</button></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<div class="modal fade" id="modalRegistro" tabindex="-1">
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-header bg-primary text-white">
+<h5 class="modal-title">Novo registro</h5>
+<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+</div>
+<div class="modal-body">
+<form id="formRegistro">
+<div class="mb-3">
+<label class="form-label">Nome</label>
+<input type="text" id="novoNome" class="form-control" required>
+</div>
+<div class="mb-3">
+<label class="form-label">Descrição</label>
+<input type="text" id="novaDescricao" class="form-control" required>
+</div>
+<div class="mb-3">
+<label class="form-label">Data</label>
+<input type="date" id="novaData" class="form-control" required>
+</div>
+<div class="mb-3">
+<label class="form-label">Status</label>
+<select id="novoStatus" class="form-select">
+<option>Pendente</option>
+<option>Em andamento</option>
+<option>Concluído</option>
+</select>
+</div>
+<button class="btn btn-primary w-100" type="submit">Salvar registro</button>
+</form>
+</div>
+</div>
+</div>
+</div>
+<footer class="bg-dark text-white text-center py-3">Painel Administrativo • Bootstrap 5</footer>
+<script>
+const tabela=document.getElementById("tabela");
+function atualizar(){
+const linhas=Array.from(tabela.querySelectorAll("tr"));
+document.getElementById("total").textContent=linhas.length;
+document.getElementById("pendentes").textContent=linhas.filter(l=>l.dataset.status==="Pendente").length;
+document.getElementById("concluidos").textContent=linhas.filter(l=>l.dataset.status==="Concluído").length;
+}
+function definirStatus(){
+tabela.querySelectorAll("tr").forEach(l=>{
+const texto=l.cells[3].textContent.trim();
+l.dataset.status=texto;
+});
+atualizar();
+}
+function concluir(botao){
+const linha=botao.closest("tr");
+linha.cells[3].innerHTML='<span class="badge bg-success">Concluído</span>';
+linha.cells[4].innerHTML='<button class="btn btn-sm btn-secondary" disabled>Finalizado</button>';
+definirStatus();
+}
+document.getElementById("formRegistro").addEventListener("submit",function(e){
+e.preventDefault();
+const nome=document.getElementById("novoNome").value;
+const descricao=document.getElementById("novaDescricao").value;
+const data=document.getElementById("novaData").value;
+const status=document.getElementById("novoStatus").value;
+const dataFormatada=data.split("-").reverse().join("/");
+const badge=status==="Concluído"?"success":status==="Pendente"?"warning text-dark":"info text-dark";
+const botao=status==="Concluído"?'<button class="btn btn-sm btn-secondary" disabled>Finalizado</button>':'<button class="btn btn-sm btn-success" onclick="concluir(this)">Concluir</button>';
+const linha=document.createElement("tr");
+const valores=[nome,descricao,dataFormatada];
+valores.forEach(valor=>{
+const celula=document.createElement("td");
+celula.textContent=valor;
+linha.appendChild(celula);
+});
+const celulaStatus=document.createElement("td");
+const etiqueta=document.createElement("span");
+etiqueta.className="badge bg-"+badge;
+etiqueta.textContent=status;
+celulaStatus.appendChild(etiqueta);
+linha.appendChild(celulaStatus);
+const celulaAcao=document.createElement("td");
+celulaAcao.innerHTML=botao;
+linha.appendChild(celulaAcao);
+tabela.appendChild(linha);
+definirStatus();
+this.reset();
+bootstrap.Modal.getInstance(document.getElementById("modalRegistro")).hide();
+});
+document.getElementById("pesquisa").addEventListener("input",function(){
+const termo=this.value.toLowerCase();
+tabela.querySelectorAll("tr").forEach(linha=>{
+linha.style.display=linha.textContent.toLowerCase().includes(termo)?"":"none";
+});
+});
+definirStatus();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
